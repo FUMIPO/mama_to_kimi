@@ -2,16 +2,17 @@ This is the web app for mama_to_kimi. Built with Next.js(App Router), TypeScript
 
 ## Environment Variables
 
-Create `.env.local` in the project root based on `env.example`.
+Create `.env.local` at `web/` based on `.env.local.example`.
 
 ```
-R2_ACCOUNT_ID=
-R2_ACCESS_KEY_ID=
-R2_SECRET_ACCESS_KEY=
+R2_ACCOUNT_ID=xxxx
+R2_ACCESS_KEY_ID=xxxx
+R2_SECRET_ACCESS_KEY=xxxx
 R2_BUCKET=mama-to-kimi
+
 UPLOAD_PIN=123456
-NEXT_PUBLIC_TURNSTILE_SITE_KEY=
-TURNSTILE_SECRET_KEY=
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=dummy
+TURNSTILE_SECRET_KEY=dummy
 ```
 
 ## Getting Started
@@ -19,8 +20,12 @@ TURNSTILE_SECRET_KEY=
 First, run the development server:
 
 ```bash
-yarn dev
+cd web
+pnpm install
+pnpm dev
 ```
+
+Note: Do NOT commit `.env.local`.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
 Visit `/upload` to try the MVP uploader.
