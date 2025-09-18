@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBucketName } from '@/lib/r2';
-import { randomUUID } from 'crypto';
 
 export const runtime = 'edge';
 
@@ -51,7 +50,8 @@ export async function POST(req: NextRequest) {
   const mm = String(now.getMonth() + 1).padStart(2, '0');
   const dd = String(now.getDate()).padStart(2, '0');
   const folder = `${yyyy}/${mm}/${dd}`;
-  const key = `${folder}/${randomUUID()}.jpg`;
+  const id = (globalThis as any).crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+  const key = `${folder}/${id}.jpg`;
 
   return NextResponse.json({ bucket, key });
 }
