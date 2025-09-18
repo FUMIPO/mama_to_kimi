@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBucketName } from '@/lib/r2';
 
 export const runtime = 'edge';
 
@@ -32,28 +31,31 @@ async function verifyTurnstile(token: string | null): Promise<boolean> {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => null);
-  const pin = body?.pin as string | null;
-  const turnstileToken = body?.turnstileToken as string | null;
+  try {
+    const body = await req.json().catch(() => null);
+    const pin = body?.pin as string | null;
+    const turnstileToken = body?.turnstileToken as string | null;
 
-  if (!isValidPin(pin)) {
-    return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 });
+    if (!isValidPin(pin)) {
+      return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 });
+    }
+    const ok = await verifyTurnstile(turnstileToken);
+    if (!ok) {
+      return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 401 });
+    }
+
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const folder = `${yyyy}/${mm}/${dd}`;
+    const id = (globalThis as any).crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+    const key = `${folder}/${id}.jpg`;
+
+    return NextResponse.json({ key }, { status: 200 });
+  } catch (e) {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
-  const ok = await verifyTurnstile(turnstileToken);
-  if (!ok) {
-    return NextResponse.json({ error: 'Turnstile verification failed' }, { status: 401 });
-  }
-
-  const bucket = getBucketName();
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  const folder = `${yyyy}/${mm}/${dd}`;
-  const id = (globalThis as any).crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
-  const key = `${folder}/${id}.jpg`;
-
-  return NextResponse.json({ bucket, key });
 }
 
 
