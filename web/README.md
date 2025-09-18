@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is the web app for mama_to_kimi. Built with Next.js(App Router), TypeScript, Tailwind CSS.
+
+## Environment Variables
+
+Create `.env.local` in the project root based on `env.example`.
+
+```
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=mama-to-kimi
+UPLOAD_PIN=123456
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET_KEY=
+```
 
 ## Getting Started
 
@@ -14,7 +28,8 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
+Visit `/upload` to try the MVP uploader.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
